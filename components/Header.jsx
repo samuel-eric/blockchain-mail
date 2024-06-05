@@ -7,9 +7,9 @@ import { FaPen } from 'react-icons/fa';
 import { LoginContext } from '@/app/provider';
 
 const Header = () => {
-	const { user, setUser } = useContext(LoginContext);
+	const { user, logout } = useContext(LoginContext);
 	const handleLogout = () => {
-		setUser(null);
+		logout();
 	};
 
 	return (

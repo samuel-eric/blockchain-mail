@@ -3,25 +3,46 @@
 import { useState, useContext } from 'react';
 import Header from '@/components/Header';
 import { LoginContext } from '../provider';
-import userData from '@/data/db.json';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const Login = () => {
-	const { user, setUser } = useContext(LoginContext);
+	const { login } = useContext(LoginContext);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [walletAddress, setWalletAddress] = useState('');
 	const [error, setError] = useState('');
 	const router = useRouter();
+	const checkDuplicate = async (username, walletAddress) => {
+		const res = await fetch('/api/user');
+		const data = await res.json();
+		const userData = data.users;
+		for (let i = 0; i < userData.length; i++) {
+			if (
+				userData[i].username === username ||
+				userData[i].walletAddress === walletAddress
+			) {
+				return true;
+			}
+		}
+		return false;
+	};
 	const handleSignUp = async () => {
 		if (username === '' || password === '' || walletAddress === '') {
 			setError('Please input all fields');
 		}
-		const res = await fetch('/api/user', {
-			method: 'POST',
-			body: JSON.stringify({ username, password, walletAddress }),
-		});
+		const isDuplicate = await checkDuplicate(username, walletAddress);
+		if (isDuplicate) {
+			setError('Username or address has taken');
+		} else {
+			const res = await fetch('/api/user', {
+				method: 'POST',
+				body: JSON.stringify({ username, password, walletAddress }),
+			});
+			const data = await res.json();
+			login(data.user);
+			router.push('/');
+		}
 	};
 	return (
 		<main className='bg-slate-100 h-full rounded-lg box-border text-slate-900 overflow-auto'>

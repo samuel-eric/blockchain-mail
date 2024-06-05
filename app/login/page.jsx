@@ -3,25 +3,27 @@
 import { useState, useContext } from 'react';
 import Header from '@/components/Header';
 import { LoginContext } from '../provider';
-import userData from '@/data/db.json';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const Login = () => {
-	const { user, setUser } = useContext(LoginContext);
+	const { login } = useContext(LoginContext);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const router = useRouter();
-	const handleLogin = () => {
+	const handleLogin = async () => {
 		if (username === '' || password === '') {
 			setError('Please input username and password');
 		}
+		const res = await fetch('/api/user');
+		const data = await res.json();
+		const userData = data.users;
 		let isLoggedIn = false;
 		userData.forEach((data) => {
 			if (data.username === username) {
 				if (data.password === password) {
-					setUser(data);
+					login(data);
 					isLoggedIn = true;
 				}
 			}
