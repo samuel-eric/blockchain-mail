@@ -2,13 +2,16 @@
 
 import { useContext } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { MdEmail, MdLogout } from 'react-icons/md';
 import { FaPen } from 'react-icons/fa';
 import { LoginContext } from '@/app/provider';
 
 const Header = () => {
 	const { user, logout } = useContext(LoginContext);
+	const router = useRouter();
 	const handleLogout = () => {
+		router.push('/');
 		logout();
 	};
 
@@ -26,7 +29,7 @@ const Header = () => {
 						<MdLogout />
 						Log out
 					</button>
-					<button className='btn-primary'>
+					<button className='btn-primary' onClick={() => router.push('/add')}>
 						<FaPen />
 						Add New Email
 					</button>
