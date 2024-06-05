@@ -14,7 +14,6 @@ export function Provider({ children }) {
 			const getUserData = async (username) => {
 				const res = await fetch(`/api/user/${username}`);
 				const data = await res.json();
-				console.log(data);
 				setUser(data.user);
 			};
 			getUserData(usernameLocal);

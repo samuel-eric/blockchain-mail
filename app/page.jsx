@@ -8,7 +8,7 @@ import { LoginContext } from './provider';
 export default function Home() {
 	const { user } = useContext(LoginContext);
 	const router = useRouter();
-	console.log(user);
+	console.log('user: ', user?.username);
 	return (
 		<main className='bg-slate-100 h-full rounded-lg box-border text-slate-900 overflow-auto'>
 			<Header />

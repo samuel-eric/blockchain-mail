@@ -16,24 +16,17 @@ const Login = () => {
 		if (username === '' || password === '') {
 			setError('Please input username and password');
 		}
-		const res = await fetch('/api/user');
+		const res = await fetch(`/api/user/${username}`);
 		const data = await res.json();
-		const userData = data.users;
-		let isLoggedIn = false;
-		userData.forEach((data) => {
-			if (data.username === username) {
-				if (data.password === password) {
-					login(data);
-					isLoggedIn = true;
-				}
+		const userData = data.user;
+		if (userData !== undefined) {
+			if (userData.password === password) {
+				login(userData);
+				router.push('/');
 			}
-		});
-		if (!isLoggedIn) {
-			setError('Incorrect username or password');
 		} else {
-			router.push('/');
+			setError('Incorrect username or password');
 		}
-		console.log(userData);
 	};
 	return (
 		<main className='bg-slate-100 h-full rounded-lg box-border text-slate-900 overflow-auto'>
