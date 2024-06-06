@@ -2,13 +2,26 @@
 
 import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { LoginContext } from './provider';
 
 export default function Home() {
 	const { user } = useContext(LoginContext);
+	const [emails, setEmails] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 	console.log('user: ', user?.username);
+
+	useEffect(() => {
+		const getEmails = async () => {
+			if (user) {
+				const res = await fetch(`/api/email/${user?.username}`);
+				const data = await res.json();
+				setEmails(data.emails);
+			}
+		};
+		getEmails();
+	}, [user]);
 	return (
 		<main className='bg-slate-100 h-full rounded-lg box-border text-slate-900 overflow-auto'>
 			<Header />

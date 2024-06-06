@@ -3,12 +3,49 @@
 import { useContext, useState } from 'react';
 import Header from '@/components/Header';
 import { LoginContext } from '../provider';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const Add = () => {
 	const { user } = useContext(LoginContext);
 	const [receiver, setReceiver] = useState('');
 	const [subject, setSubject] = useState('');
 	const [body, setBody] = useState('');
+	const router = useRouter();
+
+	const handleSend = async () => {
+		// check if all field sudah diisi
+		if (receiver === '' || subject === '' || body === '') {
+			toast.error('Please fill all fields');
+		} else {
+			// check if receiver exist
+			const res = await fetch(`/api/user/${receiver}`);
+			const data = await res.json();
+			if (data.user === undefined) {
+				toast.error('Receiver does not exist');
+			} else {
+				console.log('subject ', subject);
+				console.log('body ', body);
+				// check apakah receiver udah ngizinin, tapi itu nanti aja
+				// kirim email
+				const res = await fetch('/api/email', {
+					method: 'POST',
+					body: JSON.stringify({
+						sender: user.username,
+						receiver,
+						subject,
+						body,
+						receiverPubKey: data.user.publicKey,
+						senderPrivKey: user.privateKey,
+					}),
+				});
+				const resData = await res.json();
+				router.push('/');
+				toast.success(resData.message);
+			}
+		}
+	};
+
 	return (
 		<main className='bg-slate-100 h-full rounded-lg box-border text-slate-900 overflow-auto'>
 			<Header />
@@ -68,7 +105,12 @@ const Add = () => {
 						></textarea>
 					</div>
 					<div className='mt-4'>
-						<button className='btn-primary w-full justify-center'>Send</button>
+						<button
+							className='btn-primary w-full justify-center'
+							onClick={handleSend}
+						>
+							Send
+						</button>
 					</div>
 				</div>
 			</div>

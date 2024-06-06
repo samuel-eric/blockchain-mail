@@ -1,4 +1,5 @@
 import { sha256 } from 'js-sha256';
+import fs from 'fs';
 
 class Block {
 	constructor(data = {}) {
@@ -43,4 +44,24 @@ class Blockchain {
 		}
 		return true;
 	}
+
+	saveToJson() {
+		console.log(this.chain);
+		const json = JSON.stringify(this.chain);
+		fs.writeFileSync('data/blockchain.json', json);
+	}
+
+	readFromJson() {
+		const data = fs.readFileSync('data/blockchain.json', 'utf8');
+		const blockchain = JSON.parse(data);
+		if (blockchain.length === 0) {
+			this.chain = [new Block()];
+		} else {
+			this.chain = blockchain;
+		}
+	}
 }
+
+const emailBlockchain = new Blockchain();
+
+export { emailBlockchain, Block };

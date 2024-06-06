@@ -5,13 +5,13 @@ import Header from '@/components/Header';
 import { LoginContext } from '../provider';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 
 const Login = () => {
 	const { login } = useContext(LoginContext);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [walletAddress, setWalletAddress] = useState('');
-	const [error, setError] = useState('');
 	const router = useRouter();
 	const checkDuplicate = async (username, walletAddress) => {
 		const res = await fetch('/api/user');
@@ -29,19 +29,21 @@ const Login = () => {
 	};
 	const handleSignUp = async () => {
 		if (username === '' || password === '' || walletAddress === '') {
-			setError('Please input all fields');
-		}
-		const isDuplicate = await checkDuplicate(username, walletAddress);
-		if (isDuplicate) {
-			setError('Username or address has taken');
+			toast.error('Please input all fields');
 		} else {
-			const res = await fetch('/api/user', {
-				method: 'POST',
-				body: JSON.stringify({ username, password, walletAddress }),
-			});
-			const data = await res.json();
-			login(data.user);
-			router.push('/');
+			const isDuplicate = await checkDuplicate(username, walletAddress);
+			if (isDuplicate) {
+				toast.error('Username or address has taken');
+			} else {
+				const res = await fetch('/api/user', {
+					method: 'POST',
+					body: JSON.stringify({ username, password, walletAddress }),
+				});
+				const data = await res.json();
+				login(data.user);
+				router.push('/');
+				toast.success(`Signed up as ${data.user.username}`);
+			}
 		}
 	};
 	return (
@@ -77,11 +79,6 @@ const Login = () => {
 					<Link href='/login' className='underline'>
 						Have account? Login
 					</Link>
-					{error !== '' && (
-						<div className='bg-red-200 w-10/12 p-3 flex justify-center items-center rounded-md'>
-							{error}
-						</div>
-					)}
 				</div>
 			</div>
 		</main>

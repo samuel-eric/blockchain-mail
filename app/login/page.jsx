@@ -5,27 +5,29 @@ import Header from '@/components/Header';
 import { LoginContext } from '../provider';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 
 const Login = () => {
 	const { login } = useContext(LoginContext);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const [error, setError] = useState('');
 	const router = useRouter();
 	const handleLogin = async () => {
 		if (username === '' || password === '') {
-			setError('Please input username and password');
-		}
-		const res = await fetch(`/api/user/${username}`);
-		const data = await res.json();
-		const userData = data.user;
-		if (userData !== undefined) {
-			if (userData.password === password) {
-				login(userData);
-				router.push('/');
-			}
+			toast.error('Please input username and password');
 		} else {
-			setError('Incorrect username or password');
+			const res = await fetch(`/api/user/${username}`);
+			const data = await res.json();
+			const userData = data.user;
+			if (userData !== undefined) {
+				if (userData.password === password) {
+					login(userData);
+					router.push('/');
+					toast.success(`Logged in as ${userData.username}`);
+				}
+			} else {
+				toast.error('Incorrect username or password');
+			}
 		}
 	};
 	return (
@@ -54,11 +56,6 @@ const Login = () => {
 					<Link href='/sign-up' className='underline'>
 						Don't have account? Sign up
 					</Link>
-					{error !== '' && (
-						<div className='bg-red-200 w-10/12 p-3 flex justify-center items-center rounded-md'>
-							{error}
-						</div>
-					)}
 				</div>
 			</div>
 		</main>
