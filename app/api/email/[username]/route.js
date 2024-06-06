@@ -9,7 +9,7 @@ export async function GET(request, context) {
 		.filter((email) => {
 			return email.data?.receiver === username;
 		})
-		.map((email) => email.data);
+		.map((email) => ({ ...email.data, timestamp: email.timestamp }));
 	console.log(encryptedReceivedEmails);
 	if (encryptedReceivedEmails.length > 0) {
 		// dekripsi email pakai kunci privat penerima
@@ -22,12 +22,12 @@ export async function GET(request, context) {
 			return {
 				sender: email.sender,
 				receiver: email.receiver,
+				timestamp: email.timestamp,
 				subject: rsaReceiverKey.decrypt(email.subject, 'utf8'),
 				body: rsaReceiverKey.decrypt(email.body, 'utf8'),
 				signature: rsaReceiverKey.decrypt(email.signature, 'utf8'),
 			};
 		});
-		console.log('decrypted received emails', decryptedReceivedEmails);
 		// verifikasi tanda tangan email
 		const receivedEmails = await Promise.all(
 			decryptedReceivedEmails.map(async (email) => {
@@ -51,9 +51,8 @@ export async function GET(request, context) {
 				return { ...email, isValid };
 			})
 		);
-		console.log('received emails: ', receivedEmails);
-		return Response.json({ email: receivedEmails });
+		return Response.json({ emails: receivedEmails });
 	} else {
-		return Response.json({ email: [] });
+		return Response.json({ emails: [] });
 	}
 }
