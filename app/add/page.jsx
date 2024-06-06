@@ -27,21 +27,29 @@ const Add = () => {
 				console.log('subject ', subject);
 				console.log('body ', body);
 				// check apakah receiver udah ngizinin, tapi itu nanti aja
-				// kirim email
-				const res = await fetch('/api/email', {
-					method: 'POST',
-					body: JSON.stringify({
-						sender: user.username,
-						receiver,
-						subject,
-						body,
-						receiverPubKey: data.user.publicKey,
-						senderPrivKey: user.privateKey,
-					}),
-				});
+				let hasBeenApproved = false;
+				const res = await fetch(`/api/permission/${data.user.username}`);
 				const resData = await res.json();
-				router.push('/');
-				toast.success(resData.message);
+				hasBeenApproved = resData.approvedSenders.includes(user.username);
+				if (hasBeenApproved) {
+					// kirim email
+					const res = await fetch('/api/email', {
+						method: 'POST',
+						body: JSON.stringify({
+							sender: user.username,
+							receiver,
+							subject,
+							body,
+							receiverPubKey: data.user.publicKey,
+							senderPrivKey: user.privateKey,
+						}),
+					});
+					const resData = await res.json();
+					router.push('/');
+					toast.success(resData.message);
+				} else {
+					toast.error('You have not been approved to send to this user');
+				}
 			}
 		}
 	};

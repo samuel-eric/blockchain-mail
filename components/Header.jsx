@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MdEmail, MdLogout } from 'react-icons/md';
-import { FaPen } from 'react-icons/fa';
+import { FaPen, FaPlus } from 'react-icons/fa';
 import { LoginContext } from '@/app/provider';
 
 const Header = () => {
@@ -28,6 +28,13 @@ const Header = () => {
 					<button className='btn-secondary' onClick={handleLogout}>
 						<MdLogout />
 						Log out
+					</button>
+					<button
+						className='btn-primary'
+						onClick={() => router.push('/add-permission')}
+					>
+						<FaPlus />
+						Edit Approved Sender
 					</button>
 					<button className='btn-primary' onClick={() => router.push('/add')}>
 						<FaPen />

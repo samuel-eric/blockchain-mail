@@ -10,7 +10,6 @@ export async function GET(request, context) {
 			return email.data?.receiver === username;
 		})
 		.map((email) => ({ ...email.data, timestamp: email.timestamp }));
-	console.log(encryptedReceivedEmails);
 	if (encryptedReceivedEmails.length > 0) {
 		// dekripsi email pakai kunci privat penerima
 		const res = await fetch(`${process.env.URL}/api/user/${username}`);
