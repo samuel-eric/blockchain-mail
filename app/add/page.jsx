@@ -30,6 +30,7 @@ const Add = () => {
 				let hasBeenApproved = false;
 				const res = await fetch(`/api/permission/${data.user.username}`);
 				const resData = await res.json();
+				console.log(resData);
 				hasBeenApproved = resData.approvedSenders.includes(user.username);
 				if (hasBeenApproved) {
 					// kirim email

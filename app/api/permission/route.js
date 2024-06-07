@@ -3,19 +3,18 @@ import { emailBlockchain, Block } from '@/utils/blockchain';
 
 export async function POST(request) {
 	const body = await request.json();
-	// enkripsi data pakai kunci publik user
+	// tanda tangan pakaai kunci privat pengguna
 	const key = new NodeRSA();
-	key.importKey(body.pubKey, 'pkcs8-public');
-	const encrytedData = {
+	key.importKey(body.privKey, 'pkcs8-private');
+	const data = {
 		for: body.username,
-		approvedSenders: key.encrypt(
-			JSON.stringify(body.approvedSenders),
-			'base64'
-		),
+		approvedSenders: body.approvedSenders,
 	};
+	const signature = key.sign(JSON.stringify(data), 'base64');
+	data.signature = signature;
 	// tambah ke blockchain
 	emailBlockchain.readFromJson();
-	emailBlockchain.addBlock(new Block(encrytedData));
+	emailBlockchain.addBlock(new Block(data));
 	emailBlockchain.saveToJson();
 	return Response.json({ message: 'Approved senders updated' });
 }

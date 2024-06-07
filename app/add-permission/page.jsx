@@ -60,7 +60,7 @@ const page = () => {
 				method: 'POST',
 				body: JSON.stringify({
 					username: user.username,
-					pubKey: user.publicKey,
+					privKey: user.privateKey,
 					approvedSenders,
 				}),
 			});
@@ -76,7 +76,7 @@ const page = () => {
 			<div className='flex justify-center items-center h-5/6'>
 				<div className='bg-slate-50 rounded-lg shadow-md w-1/3 px-6 py-14'>
 					<h1 className='font-semibold text-3xl mb-4 text-center'>
-						Add Approved Sender
+						Edit Approved Sender
 					</h1>
 					{usernames === null && (
 						<span className='animate-bounce text-center block my-2 text-xl'>
@@ -121,7 +121,7 @@ const page = () => {
 								className='btn-primary w-full mt-5 justify-center'
 								onClick={handleSubmit}
 							>
-								Add
+								Edit
 							</button>
 						</>
 					)}

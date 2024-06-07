@@ -33,11 +33,11 @@ const Header = () => {
 						className='btn-primary'
 						onClick={() => router.push('/add-permission')}
 					>
-						<FaPlus />
+						<FaPen />
 						Edit Approved Sender
 					</button>
 					<button className='btn-primary' onClick={() => router.push('/add')}>
-						<FaPen />
+						<FaPlus />
 						Add New Email
 					</button>
 				</div>
