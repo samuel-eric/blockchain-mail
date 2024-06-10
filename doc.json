@@ -1,0 +1,11 @@
+{
+	"timestamp": "1718008566906",
+	"data": {
+		"sender": "Samuel",
+		"receiver": "Eric",
+		"subject": "apa kabar",
+		"body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+	},
+	"hash": "796b85798be63aecbc129bc75a9558d4a4cd439f5fa348628a02d829d01580ab",
+	"prevHash": "07bad8e41876ebe3061d329582ed4dc6db17c8bb5cebf3674f0a5bbf978da7ff"
+}

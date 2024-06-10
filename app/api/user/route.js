@@ -2,8 +2,13 @@ import fs from 'fs';
 import NodeRSA from 'node-rsa';
 import aesjs from 'aes-js';
 
-const key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+// random generated
+const key = [
+	85, 74, 19, 10, 28, 51, 25, 35, 88, 44, 34, 27, 33, 95, 59, 20, 93, 50, 39,
+	94, 60, 30, 55, 2, 68, 62, 41, 14, 70, 22, 56, 76,
+];
 
+// Membuat user baru
 export async function POST(request) {
 	const body = await request.json();
 	// generate public and private key
@@ -51,6 +56,7 @@ export async function POST(request) {
 	});
 }
 
+// Mendapatkan seluruh user
 export async function GET(request) {
 	const encryptedUsers = JSON.parse(
 		fs.readFileSync('data/db.json', { encoding: 'utf8' })

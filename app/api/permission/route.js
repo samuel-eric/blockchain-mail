@@ -3,7 +3,7 @@ import { emailBlockchain, Block } from '@/utils/blockchain';
 
 export async function POST(request) {
 	const body = await request.json();
-	// tanda tangan pakaai kunci privat pengguna
+	// tanda tangan pakai kunci privat pengguna
 	const key = new NodeRSA();
 	key.importKey(body.privKey, 'pkcs8-private');
 	const data = {
