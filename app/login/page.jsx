@@ -24,6 +24,8 @@ const Login = () => {
 					login(userData);
 					router.push('/');
 					toast.success(`Logged in as ${userData.username}`);
+				} else {
+					toast.error('Incorrect username or password');
 				}
 			} else {
 				toast.error('Incorrect username or password');
